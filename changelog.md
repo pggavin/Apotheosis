@@ -1,3 +1,9 @@
+## 6.5.1
+* Disabled the Small Boss Gateway by default.
+  * This item is designed to serve as an example of the apoth-gateways compat, not as a usable item.
+* Fixed desyncs when reforging heavy weapons on a dedicated server.
+* Resolved some crashes that could occur when using the apoth-gateways compat.
+
 ## 6.5.0
 * Cadentem: Backported all changes from Apotheosis 7.1.0 through Apotheosis 7.3.3
   * See https://github.com/Shadows-of-Fire/Apotheosis/blob/1.20/changelog.md#710
