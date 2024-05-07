@@ -22,6 +22,7 @@ import shadows.apotheosis.Apotheosis;
 import shadows.apotheosis.adventure.boss.BossItem;
 import shadows.apotheosis.adventure.boss.BossItemManager;
 import shadows.apotheosis.adventure.compat.GameStagesCompat.IStaged;
+import shadows.apotheosis.adventure.loot.AffixLootEntry;
 import shadows.apotheosis.adventure.loot.AffixLootManager;
 import shadows.apotheosis.adventure.loot.LootController;
 import shadows.apotheosis.adventure.loot.LootRarity;
@@ -61,7 +62,16 @@ public class GatewaysCompat {
 
         @Override
         public Component getDescription() {
-            return Component.translatable("misc.apotheosis.boss", Component.translatable(this.bossId.isEmpty() ? "misc.apotheosis.random" : this.boss.get().getEntity().getDescriptionId()));
+            if (this.bossId.isPresent()) {
+                BossItem boss = this.boss.get();
+                if (boss != null) {
+                    return Component.translatable("misc.apotheosis.boss", Component.translatable(this.boss.get().getEntity().getDescriptionId()));
+                }
+                else {
+                    return Component.literal("Unknown boss ID: " + bossId.get());
+                }
+            }
+            return Component.translatable("misc.apotheosis.boss", Component.translatable("misc.apotheosis.random"));
         }
 
         @Override
@@ -92,7 +102,13 @@ public class GatewaysCompat {
 
         @Override
         public void generateLoot(ServerLevel level, GatewayEntity gate, Player summoner, Consumer<ItemStack> list) {
-            list.accept(LootController.createLootItem(AffixLootManager.INSTANCE.getRandomItem(level.random, summoner.getLuck(), IDimensional.matches(level), IStaged.matches(summoner)).getStack(), this.rarity, level.random));
+            AffixLootEntry item = AffixLootManager.INSTANCE.getRandomItem(level.random, summoner.getLuck(), IDimensional.matches(level), IStaged.matches(summoner));
+
+            if (item == null) {
+                item = AffixLootManager.INSTANCE.getRandomItem(level.random, summoner.getLuck());
+            }
+
+            list.accept(LootController.createLootItem(item.getStack(), this.rarity, level.random));
         }
 
         @Override
