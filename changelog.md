@@ -1,3 +1,11 @@
+## 7.4.3
+* Fixed the reforging seed not being copied on death.
+* Fixed blocks with a hardness of zero being unbreakable if using Miner's Fervor.
+* Fixed a crash with Stupid Weapons.
+* t0piy: Updated Brazilian translation.
+* mc-kaishixiaxue: Updated Chinese translation.
+* Quarkrus: Updated Russian translation.
+
 ## 7.4.2
 * Fixed the game crashing when the Adventure Module was disabled.
 * Made a slight change to gem tooltips. In the future, the "Fits In" section may be removed.
