@@ -11,6 +11,7 @@ import dev.shadowsoffire.apotheosis.adventure.Adventure.Items;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixHelper;
 import dev.shadowsoffire.apotheosis.adventure.affix.AffixInstance;
 import dev.shadowsoffire.apotheosis.adventure.affix.effect.TelepathicAffix;
+import dev.shadowsoffire.apotheosis.adventure.affix.reforging.ReforgingMenu;
 import dev.shadowsoffire.apotheosis.adventure.commands.AffixCommand;
 import dev.shadowsoffire.apotheosis.adventure.commands.BossCommand;
 import dev.shadowsoffire.apotheosis.adventure.commands.CategoryCheckCommand;
@@ -57,6 +58,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent.FinalizeSpawn;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck;
 import net.minecraftforge.event.level.BlockEvent;
@@ -316,6 +318,15 @@ public class AdventureEvents {
                 }
             }
         }
+    }
+
+    /**
+     * Copy the reforge seed on clone (death or otherwise) to prevent access to free reforge rerolls.
+     */
+    @SubscribeEvent
+    public void clone(PlayerEvent.Clone e) {
+        int oldSeed = e.getOriginal().getPersistentData().getInt(ReforgingMenu.REFORGE_SEED);
+        e.getEntity().getPersistentData().putInt(ReforgingMenu.REFORGE_SEED, oldSeed);
     }
 
 }
