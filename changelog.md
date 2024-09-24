@@ -1,3 +1,7 @@
+## 6.5.2
+* Fixed the reforging seed not being copied on death.
+* Fixed a rare crash when extracting gems.
+
 ## 6.5.1
 * Disabled the Small Boss Gateway by default.
   * This item is designed to serve as an example of the apoth-gateways compat, not as a usable item.
