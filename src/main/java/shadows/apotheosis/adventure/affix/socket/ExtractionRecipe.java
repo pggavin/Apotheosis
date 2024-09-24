@@ -41,7 +41,13 @@ public class ExtractionRecipe extends ApothUpgradeRecipe implements IExtUpgradeR
     @Override
     public ItemStack assemble(Container pInv) {
         ItemStack base = pInv.getItem(0);
-        ItemStack out = SocketHelper.getGems(base).get(0);
+
+        List<ItemStack> gems = SocketHelper.getGems(base);
+        if (gems.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack out = gems.get(0);
         out.removeTagKey(GemItem.UUID_ARRAY);
         return out;
     }
