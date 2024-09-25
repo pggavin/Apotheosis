@@ -4,8 +4,8 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Predicates;
 
-import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
+import dev.shadowsoffire.apotheosis.loot.LootRarity;
+import dev.shadowsoffire.apotheosis.loot.RarityRegistry;
 import dev.shadowsoffire.apothic_attributes.api.IFormattableAttribute;
 import dev.shadowsoffire.attributeslib.AttributesLib;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;

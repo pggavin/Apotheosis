@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import dev.shadowsoffire.apotheosis.adventure.AdventureModule;
+import dev.shadowsoffire.apotheosis.AdventureModule;
 import dev.shadowsoffire.placebo.config.Configuration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

@@ -14,9 +14,9 @@ import com.google.gson.stream.JsonWriter;
 import com.mojang.serialization.JsonOps;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import dev.shadowsoffire.apotheosis.adventure.loot.AffixLootEntry;
-import dev.shadowsoffire.apotheosis.adventure.loot.LootRarity;
-import dev.shadowsoffire.apotheosis.adventure.loot.RarityRegistry;
+import dev.shadowsoffire.apotheosis.loot.AffixLootEntry;
+import dev.shadowsoffire.apotheosis.loot.LootRarity;
+import dev.shadowsoffire.apotheosis.loot.RarityRegistry;
 import dev.shadowsoffire.placebo.reload.DynamicHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
