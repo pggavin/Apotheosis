@@ -1,0 +1,43 @@
+{
+    "required": true,
+    "package": "dev.shadowsoffire.apotheosis.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "refmap": "apotheosis.refmap.json",
+    "maxShiftBy": 5,
+    "mixins": [
+        "AnvilMenuMixin",
+        "ArrowItemMixin",
+        "BlockMixin",
+        "CandleBlockMixin",
+        "CrossbowItemMixin",
+        "EnchantmentHelperMixin",
+        "EnchantmentMixin",
+        "FallingBlockEntityMixin",
+        "ForgeHooksMixin",
+        "GoldToolsHaveFortuneModuleMixin",
+        "IForgeItemStackMixin",
+        "ItemMixin",
+        "ItemStackMixin",
+        "LivingEntityInvoker",
+        "LivingEntityMixin",
+        "MHFMixinLivingEntity",
+        "ShearsItemMixin",
+        "SheepMixin",
+        "SlimeMixin",
+        "SmithingMenuMixin",
+        "SpellCrossbowMixin",
+        "TemptGoalMixin",
+        "ThrownTridentMixin",
+        "TridentItemMixin",
+        "WandererSpawnerMixin"
+    ],
+    "client": [
+        "client.AbstractContainerScreenMixin",
+        "client.AnvilScreenMixin",
+        "client.AttributeTooltipsMixin",
+        "client.EnchantmentScreenMixin",
+        "client.GuiMixin"
+    ],
+    "minVersion": "0.8",
+    "maxShiftBy": 5
+}

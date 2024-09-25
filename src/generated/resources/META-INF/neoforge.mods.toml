@@ -1,0 +1,41 @@
+modLoader="javafml"
+
+loaderVersion="[2,)"
+
+license="MIT License"
+
+[[mods]] #mandatory
+
+modId="apotheosis"
+
+version="8.0.0-alpha0"
+
+displayName="Apotheosis"
+
+authors="Shadows_of_Fire"
+
+description='''All things that should have been'''
+
+[[mixins]]
+config="apotheosis.mixins.json"
+
+[[dependencies.apotheosis]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.apotheosis]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1.61,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.apotheosis]]
+    modId="placebo"
+    type="required"
+    versionRange="[9.5.3,)"
+    ordering="AFTER"
+    side="BOTH"
