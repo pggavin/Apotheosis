@@ -1,7 +1,7 @@
 package dev.shadowsoffire.apotheosis.compat;
 
 import dev.shadowsoffire.apotheosis.Apotheosis;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import vazkii.patchouli.api.PatchouliAPI;
 import vazkii.patchouli.api.PatchouliAPI.IPatchouliAPI;
 
