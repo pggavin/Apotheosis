@@ -46,7 +46,7 @@ public class GatewaysCompat {
 
         public static Codec<BossWaveEntity> CODEC = RecordCodecBuilder.create(inst -> inst
             .group(
-                PlaceboCodecs.nullableField(ResourceLocation.CODEC, "boss").forGetter(b -> b.bossId))
+                ResourceLocation.CODEC.optionalFieldOf("boss").forGetter(b -> b.bossId))
             .apply(inst, BossWaveEntity::new));
 
         private final Optional<ResourceLocation> bossId;

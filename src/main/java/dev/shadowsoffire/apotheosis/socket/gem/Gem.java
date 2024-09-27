@@ -41,13 +41,13 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
 
     public static final Codec<Gem> CODEC = RecordCodecBuilder.create(inst -> inst.group(
         Codec.intRange(0, Integer.MAX_VALUE).fieldOf("weight").forGetter(ILuckyWeighted::getWeight),
-        PlaceboCodecs.nullableField(Codec.floatRange(0, Float.MAX_VALUE), "quality", 0F).forGetter(ILuckyWeighted::getQuality),
-        PlaceboCodecs.nullableField(PlaceboCodecs.setOf(ResourceLocation.CODEC), "dimensions", Collections.emptySet()).forGetter(IDimensional::getDimensions),
-        PlaceboCodecs.nullableField(LootRarity.CODEC, "min_rarity").forGetter(g -> Optional.of(g.getMinRarity())),
-        PlaceboCodecs.nullableField(LootRarity.CODEC, "max_rarity").forGetter(g -> Optional.of(g.getMaxRarity())),
+        Codec.floatRange(0, Float.MAX_VALUE).optionalFieldOf("quality", 0F).forGetter(ILuckyWeighted::getQuality),
+        PlaceboCodecs.setOf(ResourceLocation.CODEC).optionalFieldOf("dimensions", Collections.emptySet()).forGetter(IDimensional::getDimensions),
+        LootRarity.CODEC.optionalFieldOf("min_rarity").forGetter(g -> Optional.of(g.getMinRarity())),
+        LootRarity.CODEC.optionalFieldOf("max_rarity").forGetter(g -> Optional.of(g.getMaxRarity())),
         GemBonus.CODEC.listOf().fieldOf("bonuses").forGetter(Gem::getBonuses),
-        PlaceboCodecs.nullableField(Codec.BOOL, "unique", false).forGetter(Gem::isUnique),
-        PlaceboCodecs.nullableField(PlaceboCodecs.setOf(Codec.STRING), "stages").forGetter(gem -> Optional.ofNullable(gem.getStages())))
+        Codec.BOOL.optionalFieldOf("unique", false).forGetter(Gem::isUnique),
+        PlaceboCodecs.setOf(Codec.STRING).optionalFieldOf("stages").forGetter(gem -> Optional.ofNullable(gem.getStages())))
         .apply(inst, Gem::new));
 
     protected final int weight;
@@ -108,7 +108,7 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
      * @param purity   The purity of this gem.
      * @param tooltips The destination for tooltips.
      */
-    public void addInformation(ItemStack gem, LootRarity rarity, Consumer<Component> list) {
+    public void addInformation(GemInstance gem, Consumer<Component> list) {
         if (this.isUnique()) {
             list.accept(Component.translatable("text.apotheosis.unique").withStyle(Style.EMPTY.withColor(0xC73912)));
             list.accept(CommonComponents.EMPTY);
@@ -120,8 +120,8 @@ public class Gem implements CodecProvider<Gem>, ILuckyWeighted, IDimensional, Ra
 
         list.accept(Component.translatable("text.apotheosis.when_socketed_in").withStyle(ChatFormatting.GOLD));
         for (GemBonus bonus : this.bonuses) {
-            if (!bonus.supports(rarity)) continue;
-            Component modifComp = bonus.getSocketBonusTooltip(gem, rarity);
+            if (!bonus.supports(gem.rarity().get())) continue;
+            Component modifComp = bonus.getSocketBonusTooltip(gem);
             Component sum = Component.translatable("text.apotheosis.dot_prefix", Component.translatable("%s: %s", Component.translatable("gem_class." + bonus.getGemClass().key()), modifComp)).withStyle(ChatFormatting.GOLD);
             list.accept(sum);
         }

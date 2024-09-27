@@ -4,12 +4,17 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
 @Mod(Apotheosis.MODID)
 public class Apotheosis {
 
     public static final String MODID = "apotheosis";
+
+    public Apotheosis(IEventBus bus) {
+        Apoth.bootstrap();
+    }
 
     /**
      * Constructs a resource location using the {@link Apotheosis#MODID} as the namespace.

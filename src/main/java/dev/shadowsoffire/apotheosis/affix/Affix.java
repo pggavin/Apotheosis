@@ -5,13 +5,12 @@ import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
-import dev.shadowsoffire.apotheosis.ench.asm.EnchHooks;
 import dev.shadowsoffire.apotheosis.loot.LootCategory;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.Gem;
 import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
+import dev.shadowsoffire.apothic_enchanting.asm.EnchHooks;
 import dev.shadowsoffire.placebo.codec.CodecProvider;
-import dev.shadowsoffire.placebo.events.GetEnchantmentLevelEvent;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -26,7 +25,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -39,8 +37,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.common.extensions.IAttributeExtension;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import net.neoforged.neoforge.event.enchanting.GetEnchantmentLevelEvent;
 
 /**
  * An affix is a construct very similar to an enchantment, providing bonuses to arbitrary items.
@@ -118,7 +117,7 @@ public abstract class Affix implements CodecProvider<Affix> {
      * Calculates the additional damage this affix deals.
      * This damage is dealt as player physical damage, and is not impacted by critical strikes.
      */
-    public float getDamageBonus(ItemStack stack, LootRarity rarity, float level, MobType creatureType) {
+    public float getDamageBonus(ItemStack stack, LootRarity rarity, float level) {
         return 0.0F;
     }
 
@@ -279,7 +278,7 @@ public abstract class Affix implements CodecProvider<Affix> {
 
     public static String fmt(float f) {
         if (f == (long) f) return String.format("%d", (long) f);
-        else return ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(f);
+        else return IAttributeExtension.FORMAT.format(f);
     }
 
     public static MutableComponent valueBounds(Component min, Component max) {

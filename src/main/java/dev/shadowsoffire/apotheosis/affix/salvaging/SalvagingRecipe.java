@@ -23,9 +23,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
-public class SalvagingRecipe implements Recipe<Container> {
+public class SalvagingRecipe implements Recipe<SingleRecipeInput> {
 
     protected final ResourceLocation id;
     protected final Ingredient input;

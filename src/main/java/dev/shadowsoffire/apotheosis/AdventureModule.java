@@ -8,23 +8,16 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.ImmutableSet;
-
-import dev.shadowsoffire.apotheosis.Adventure.Blocks;
-import dev.shadowsoffire.apotheosis.Adventure.Items;
+import dev.shadowsoffire.apotheosis.Apoth.Blocks;
 import dev.shadowsoffire.apotheosis.Apotheosis.ApotheosisConstruction;
 import dev.shadowsoffire.apotheosis.Apotheosis.ApotheosisReloadEvent;
 import dev.shadowsoffire.apotheosis.affix.AffixRegistry;
-import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingTableTile;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingRecipe;
-import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingTableTile;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingRecipe;
-import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingTableTile;
 import dev.shadowsoffire.apotheosis.boss.BossEvents;
 import dev.shadowsoffire.apotheosis.boss.BossRegistry;
 import dev.shadowsoffire.apotheosis.boss.Exclusion;
 import dev.shadowsoffire.apotheosis.boss.MinibossRegistry;
-import dev.shadowsoffire.apotheosis.boss.BossSpawnerBlock.BossSpawnerTile;
 import dev.shadowsoffire.apotheosis.client.AdventureModuleClient;
 import dev.shadowsoffire.apotheosis.compat.AdventureTOPPlugin;
 import dev.shadowsoffire.apotheosis.compat.AdventureTwilightCompat;
@@ -49,7 +42,6 @@ import dev.shadowsoffire.apotheosis.spawner.RogueSpawnerRegistry;
 import dev.shadowsoffire.apotheosis.util.AffixItemIngredient;
 import dev.shadowsoffire.apotheosis.util.GemIngredient;
 import dev.shadowsoffire.apotheosis.util.NameHelper;
-import dev.shadowsoffire.placebo.block_entity.TickingBlockEntityType;
 import dev.shadowsoffire.placebo.config.Configuration;
 import dev.shadowsoffire.placebo.loot.LootSystem;
 import dev.shadowsoffire.placebo.registry.RegistryEvent.Register;
@@ -62,21 +54,21 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 public class AdventureModule {
 
@@ -133,14 +125,6 @@ public class AdventureModule {
                 Items.SALVAGING_TABLE, Items.GEM_CUTTING_TABLE, Items.SIMPLE_REFORGING_TABLE, Items.REFORGING_TABLE, Items.AUGMENTING_TABLE);
             TabFillingRegistry.register(Adventure.Tabs.ADVENTURE.getKey(), Items.GEM);
         });
-    }
-
-    @SubscribeEvent
-    public void tiles(Register<BlockEntityType<?>> e) {
-        e.getRegistry().register(new TickingBlockEntityType<>(BossSpawnerTile::new, ImmutableSet.of(Blocks.BOSS_SPAWNER.get()), false, true), "boss_spawner");
-        e.getRegistry().register(new TickingBlockEntityType<>(ReforgingTableTile::new, ImmutableSet.of(Blocks.SIMPLE_REFORGING_TABLE.get(), Blocks.REFORGING_TABLE.get()), true, false), "reforging_table");
-        e.getRegistry().register(new BlockEntityType<>(SalvagingTableTile::new, ImmutableSet.of(Blocks.SALVAGING_TABLE.get()), null), "salvaging_table");
-        e.getRegistry().register(new TickingBlockEntityType<>(AugmentingTableTile::new, ImmutableSet.of(Blocks.AUGMENTING_TABLE.get()), true, false), "augmenting_table");
     }
 
     @SubscribeEvent

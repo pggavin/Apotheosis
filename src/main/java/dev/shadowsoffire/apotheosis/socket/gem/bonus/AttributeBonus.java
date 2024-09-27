@@ -11,6 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.socket.gem.GemItem;
 import dev.shadowsoffire.attributeslib.AttributesLib;
 import dev.shadowsoffire.attributeslib.api.IFormattableAttribute;
@@ -45,13 +46,13 @@ public class AttributeBonus extends GemBonus {
     }
 
     @Override
-    public void addModifiers(ItemStack gem, LootRarity rarity, BiConsumer<Attribute, AttributeModifier> map) {
-        map.accept(this.attribute, this.read(gem, rarity, GemItem.getUUIDs(gem).get(0)));
+    public void addModifiers(GemInstance gem, BiConsumer<Attribute, AttributeModifier> map) {
+        map.accept(this.attribute, this.read(gem, GemItem.getUUIDs(gem).get(0)));
     }
 
     @Override
-    public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
-        return IFormattableAttribute.toComponent(this.attribute, this.read(gem, rarity, UUID.randomUUID()), AttributesLib.getTooltipFlag());
+    public Component getSocketBonusTooltip(GemInstance gem) {
+        return IFormattableAttribute.toComponent(this.attribute, this.read(gem, UUID.randomUUID()), AttributesLib.getTooltipFlag());
     }
 
     @Override

@@ -13,6 +13,7 @@ import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.apotheosis.socket.gem.GemItem;
 import dev.shadowsoffire.apotheosis.socket.gem.bonus.GemBonus;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
@@ -48,7 +49,7 @@ public class AllStatsBonus extends GemBonus {
     }
 
     @Override
-    public void addModifiers(ItemStack gem, LootRarity rarity, BiConsumer<Attribute, AttributeModifier> map) {
+    public void addModifiers(GemInstance gem, BiConsumer<Attribute, AttributeModifier> map) {
         UUID id = GemItem.getUUIDs(gem).get(0);
         for (Attribute attr : this.attributes) {
             var modif = new AttributeModifier(id, "apoth.gem_modifier.all_stats_buff", this.values.get(rarity).min(), this.operation);

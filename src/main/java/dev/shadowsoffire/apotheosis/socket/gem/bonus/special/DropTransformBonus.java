@@ -33,7 +33,7 @@ public class DropTransformBonus extends GemBonus {
     public static Codec<DropTransformBonus> CODEC = RecordCodecBuilder.create(inst -> inst
         .group(
             gemClass(),
-            PlaceboCodecs.nullableField(TagKey.codec(Registries.BLOCK), "blocks").forGetter(a -> a.tag),
+            TagKey.codec(Registries.BLOCK).optionalFieldOf("blocks").forGetter(a -> a.tag),
             IngredientCodec.INSTANCE.fieldOf("inputs").forGetter(a -> a.inputs),
             ItemAdapter.CODEC.fieldOf("output").forGetter(a -> a.output),
             VALUES_CODEC.fieldOf("values").forGetter(a -> a.values),

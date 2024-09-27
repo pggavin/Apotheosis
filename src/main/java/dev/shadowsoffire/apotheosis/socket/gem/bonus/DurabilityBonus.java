@@ -10,11 +10,11 @@ import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 
 public class DurabilityBonus extends GemBonus {
 
@@ -32,14 +32,14 @@ public class DurabilityBonus extends GemBonus {
     }
 
     @Override
-    public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
-        float level = this.values.get(rarity).get(0);
+    public Component getSocketBonusTooltip(GemInstance gem) {
+        float level = this.values.get(gem.getRarity()).get(0);
         return Component.translatable("bonus." + this.getId() + ".desc", Affix.fmt(100 * level)).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
-    public float getDurabilityBonusPercentage(ItemStack gem, LootRarity rarity, ServerPlayer user) {
-        return this.values.get(rarity).min();
+    public float getDurabilityBonusPercentage(GemInstance gem, ServerPlayer user) {
+        return this.values.get(gem.getRarity()).min();
     }
 
     @Override

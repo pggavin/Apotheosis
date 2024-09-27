@@ -28,12 +28,12 @@ public final class AffixLootEntry implements CodecProvider<AffixLootEntry>, ILuc
     public static final Codec<AffixLootEntry> CODEC = RecordCodecBuilder.create(inst -> inst
         .group(
             Codec.intRange(0, Integer.MAX_VALUE).fieldOf("weight").forGetter(ILuckyWeighted::getWeight),
-            PlaceboCodecs.nullableField(Codec.floatRange(0, Float.MAX_VALUE), "quality", 0F).forGetter(ILuckyWeighted::getQuality),
+            Codec.floatRange(0, Float.MAX_VALUE).optionalFieldOf("quality", 0F).forGetter(ILuckyWeighted::getQuality),
             ItemAdapter.CODEC.fieldOf("stack").forGetter(a -> a.stack),
             PlaceboCodecs.setOf(ResourceLocation.CODEC).fieldOf("dimensions").forGetter(a -> a.dimensions),
             RarityRegistry.INSTANCE.holderCodec().fieldOf("min_rarity").forGetter(a -> a.minRarity),
             RarityRegistry.INSTANCE.holderCodec().fieldOf("max_rarity").forGetter(a -> a.maxRarity),
-            PlaceboCodecs.nullableField(PlaceboCodecs.setOf(Codec.STRING), "stages").forGetter(a -> Optional.ofNullable(a.stages)))
+            PlaceboCodecs.setOf(Codec.STRING).optionalFieldOf("stages").forGetter(a -> Optional.ofNullable(a.stages)))
         .apply(inst, AffixLootEntry::new));
 
     protected final int weight;

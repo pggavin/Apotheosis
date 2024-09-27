@@ -1,165 +1,200 @@
 package dev.shadowsoffire.apotheosis;
 
-import dev.shadowsoffire.apotheosis.affix.AffixRegistry;
+import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingMenu;
+import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingTableBlock;
 import dev.shadowsoffire.apotheosis.affix.augmenting.AugmentingTableTile;
-import dev.shadowsoffire.apotheosis.affix.effect.DurableAffix;
-import dev.shadowsoffire.apotheosis.affix.effect.FestiveAffix;
-import dev.shadowsoffire.apotheosis.affix.effect.MagicalArrowAffix;
-import dev.shadowsoffire.apotheosis.affix.effect.OmneticAffix;
-import dev.shadowsoffire.apotheosis.affix.effect.RadialAffix;
-import dev.shadowsoffire.apotheosis.affix.effect.TelepathicAffix;
+import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingMenu;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingRecipe;
+import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingTableBlock;
 import dev.shadowsoffire.apotheosis.affix.reforging.ReforgingTableTile;
+import dev.shadowsoffire.apotheosis.affix.salvaging.SalvageItem;
+import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingMenu;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingRecipe;
+import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingTableBlock;
 import dev.shadowsoffire.apotheosis.affix.salvaging.SalvagingTableTile;
+import dev.shadowsoffire.apotheosis.boss.BossSpawnerBlock;
 import dev.shadowsoffire.apotheosis.boss.BossSpawnerBlock.BossSpawnerTile;
-import dev.shadowsoffire.apotheosis.ench.anvil.AnvilTile;
-import dev.shadowsoffire.apotheosis.ench.library.EnchLibraryContainer;
-import dev.shadowsoffire.apotheosis.ench.library.EnchLibraryTile;
-import dev.shadowsoffire.apotheosis.ench.table.ApothEnchantmentMenu;
-import dev.shadowsoffire.apotheosis.ench.table.EnchantingRecipe;
-import dev.shadowsoffire.apotheosis.garden.EnderLeadItem;
-import dev.shadowsoffire.apotheosis.potion.PotionCharmItem;
-import dev.shadowsoffire.apotheosis.spawn.enchantment.CapturingEnchant;
-import dev.shadowsoffire.apotheosis.spawn.modifiers.SpawnerModifier;
-import dev.shadowsoffire.apotheosis.village.fletching.FletchingContainer;
-import dev.shadowsoffire.apotheosis.village.fletching.FletchingRecipe;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.BroadheadArrowEntity;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.BroadheadArrowItem;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.ExplosiveArrowEntity;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.ExplosiveArrowItem;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.MiningArrowEntity;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.MiningArrowItem;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.ObsidianArrowEntity;
-import dev.shadowsoffire.apotheosis.village.fletching.arrows.ObsidianArrowItem;
-import dev.shadowsoffire.placebo.registry.RegObjHelper;
-import dev.shadowsoffire.placebo.reload.DynamicHolder;
-import dev.shadowsoffire.placebo.util.PlaceboUtil;
-import net.minecraft.core.particles.SimpleParticleType;
+import dev.shadowsoffire.apotheosis.boss.BossSummonerItem;
+import dev.shadowsoffire.apotheosis.gen.BossDungeonFeature;
+import dev.shadowsoffire.apotheosis.gen.BossDungeonFeature2;
+import dev.shadowsoffire.apotheosis.gen.ItemFrameGemsProcessor;
+import dev.shadowsoffire.apotheosis.gen.RogueSpawnerFeature;
+import dev.shadowsoffire.apotheosis.loot.RarityRegistry;
+import dev.shadowsoffire.apotheosis.socket.gem.GemItem;
+import dev.shadowsoffire.apotheosis.socket.gem.cutting.GemCuttingBlock;
+import dev.shadowsoffire.apotheosis.socket.gem.cutting.GemCuttingMenu;
+import dev.shadowsoffire.apotheosis.util.TooltipItem;
+import dev.shadowsoffire.placebo.block_entity.TickingBlockEntityType.TickSide;
+import dev.shadowsoffire.placebo.registry.DeferredHelper;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 /**
  * Object Holder Class. For the main mod class, see {@link Apotheosis}
  */
 public class Apoth {
 
-    public static final RegObjHelper R = new RegObjHelper(Apotheosis.MODID);
+    public static final DeferredHelper R = DeferredHelper.create(Apotheosis.MODID);
+
+    public static final class Blocks {
+
+        public static final Holder<Block> BOSS_SPAWNER = R.block("boss_spawner", BossSpawnerBlock::new,
+            p -> p.requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable());
+
+        public static final Holder<Block> SIMPLE_REFORGING_TABLE = R.block("simple_reforging_table",
+            () -> new ReforgingTableBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(2, 20F), 2));
+
+        public static final Holder<Block> REFORGING_TABLE = R.block("reforging_table",
+            () -> new ReforgingTableBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(4, 1000F), 4));
+
+        public static final Holder<Block> SALVAGING_TABLE = R.block("salvaging_table", SalvagingTableBlock::new,
+            p -> p.sound(SoundType.WOOD).strength(2.5F));
+
+        public static final Holder<Block> GEM_CUTTING_TABLE = R.block("gem_cutting_table", GemCuttingBlock::new,
+            p -> p.sound(SoundType.WOOD).strength(2.5F));
+
+        public static final Holder<Block> AUGMENTING_TABLE = R.block("augmenting_table", AugmentingTableBlock::new,
+            p -> p.requiresCorrectToolForDrops().strength(4, 1000F));
+
+        private static void bootstrap() {}
+    }
 
     public static final class Items {
-        public static final RegistryObject<PotionCharmItem> POTION_CHARM = R.item("POTION_CHARM");
-        public static final RegistryObject<Item> LUCKY_FOOT = R.item("LUCKY_FOOT");
-        public static final RegistryObject<ObsidianArrowItem> OBSIDIAN_ARROW = R.item("OBSIDIAN_ARROW");
-        public static final RegistryObject<BroadheadArrowItem> BROADHEAD_ARROW = R.item("BROADHEAD_ARROW");
-        public static final RegistryObject<ExplosiveArrowItem> EXPLOSIVE_ARROW = R.item("EXPLOSIVE_ARROW");
-        public static final RegistryObject<MiningArrowItem> IRON_MINING_ARROW = R.item("IRON_MINING_ARROW");
-        public static final RegistryObject<MiningArrowItem> DIAMOND_MINING_ARROW = R.item("DIAMOND_MINING_ARROW");
-        public static final RegistryObject<EnderLeadItem> ENDER_LEAD = R.item("ENDER_LEAD");
-        public static final RegistryObject<Item> SKULL_FRAGMENT = RegistryObject.create(new ResourceLocation("wstweaks", "fragment"), ForgeRegistries.ITEMS);
-    }
 
-    public static final class Enchantments {
+        public static final Holder<Item> COMMON_MATERIAL = rarityMat("common");
 
-        public static final RegistryObject<CapturingEnchant> CAPTURING = Apoth.R.enchant("CAPTURING");
-    }
+        public static final Holder<Item> UNCOMMON_MATERIAL = rarityMat("uncommon");
 
-    public static final class Potions {
-        public static final RegistryObject<Potion> RESISTANCE = R.potion("RESISTANCE");
-        public static final RegistryObject<Potion> LONG_RESISTANCE = R.potion("LONG_RESISTANCE");
-        public static final RegistryObject<Potion> STRONG_RESISTANCE = R.potion("STRONG_RESISTANCE");
-        public static final RegistryObject<Potion> ABSORPTION = R.potion("ABSORPTION");
-        public static final RegistryObject<Potion> LONG_ABSORPTION = R.potion("LONG_ABSORPTION");
-        public static final RegistryObject<Potion> STRONG_ABSORPTION = R.potion("STRONG_ABSORPTION");
-        public static final RegistryObject<Potion> HASTE = R.potion("HASTE");
-        public static final RegistryObject<Potion> LONG_HASTE = R.potion("LONG_HASTE");
-        public static final RegistryObject<Potion> STRONG_HASTE = R.potion("STRONG_HASTE");
-        public static final RegistryObject<Potion> FATIGUE = R.potion("FATIGUE");
-        public static final RegistryObject<Potion> LONG_FATIGUE = R.potion("LONG_FATIGUE");
-        public static final RegistryObject<Potion> STRONG_FATIGUE = R.potion("STRONG_FATIGUE");
-        public static final RegistryObject<Potion> SUNDERING = R.potion("SUNDERING");
-        public static final RegistryObject<Potion> LONG_SUNDERING = R.potion("LONG_SUNDERING");
-        public static final RegistryObject<Potion> STRONG_SUNDERING = R.potion("STRONG_SUNDERING");
-        public static final RegistryObject<Potion> KNOWLEDGE = R.potion("KNOWLEDGE");
-        public static final RegistryObject<Potion> LONG_KNOWLEDGE = R.potion("LONG_KNOWLEDGE");
-        public static final RegistryObject<Potion> STRONG_KNOWLEDGE = R.potion("STRONG_KNOWLEDGE");
-        public static final RegistryObject<Potion> WITHER = R.potion("WITHER");
-        public static final RegistryObject<Potion> LONG_WITHER = R.potion("LONG_WITHER");
-        public static final RegistryObject<Potion> STRONG_WITHER = R.potion("STRONG_WITHER");
-        public static final RegistryObject<Potion> VITALITY = R.potion("VITALITY");
-        public static final RegistryObject<Potion> LONG_VITALITY = R.potion("LONG_VITALITY");
-        public static final RegistryObject<Potion> STRONG_VITALITY = R.potion("STRONG_VITALITY");
-        public static final RegistryObject<Potion> GRIEVOUS = R.potion("GRIEVOUS");
-        public static final RegistryObject<Potion> LONG_GRIEVOUS = R.potion("LONG_GRIEVOUS");
-        public static final RegistryObject<Potion> STRONG_GRIEVOUS = R.potion("STRONG_GRIEVOUS");
-        public static final RegistryObject<Potion> LEVITATION = R.potion("LEVITATION");
-        public static final RegistryObject<Potion> FLYING = R.potion("FLYING");
-        public static final RegistryObject<Potion> LONG_FLYING = R.potion("LONG_FLYING");
-        public static final RegistryObject<Potion> EXTRA_LONG_FLYING = R.potion("EXTRA_LONG_FLYING");
-    }
+        public static final Holder<Item> RARE_MATERIAL = rarityMat("rare");
 
-    public static final class Entities {
-        public static final RegistryObject<EntityType<ObsidianArrowEntity>> OBSIDIAN_ARROW = R.entity("OBSIDIAN_ARROW");
-        public static final RegistryObject<EntityType<BroadheadArrowEntity>> BROADHEAD_ARROW = R.entity("BROADHEAD_ARROW");
-        public static final RegistryObject<EntityType<ExplosiveArrowEntity>> EXPLOSIVE_ARROW = R.entity("EXPLOSIVE_ARROW");
-        public static final RegistryObject<EntityType<MiningArrowEntity>> MINING_ARROW = R.entity("MINING_ARROW");
-    }
+        public static final Holder<Item> EPIC_MATERIAL = rarityMat("epic");
 
-    public static final class Menus {
-        public static final RegistryObject<MenuType<FletchingContainer>> FLETCHING = R.menu("fletching");
-        public static final RegistryObject<MenuType<EnchLibraryContainer>> LIBRARY = R.menu("library");
-        public static final RegistryObject<MenuType<ApothEnchantmentMenu>> ENCHANTING_TABLE = R.menu("enchanting_table");
+        public static final Holder<Item> MYTHIC_MATERIAL = rarityMat("mythic");
+
+        public static final Holder<Item> ANCIENT_MATERIAL = rarityMat("ancient");
+
+        public static final Holder<Item> GEM_DUST = R.item("gem_dust", Item::new);
+
+        public static final Holder<Item> GEM_FUSED_SLATE = R.item("gem_fused_slate", Item::new);
+
+        public static final Holder<Item> SIGIL_OF_SOCKETING = R.item("sigil_of_socketing", TooltipItem::new, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> SIGIL_OF_WITHDRAWAL = R.item("sigil_of_withdrawal", TooltipItem::new, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> SIGIL_OF_REBIRTH = R.item("sigil_of_rebirth", TooltipItem::new, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> SIGIL_OF_ENHANCEMENT = R.item("sigil_of_enhancement", TooltipItem::new, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> SIGIL_OF_UNNAMING = R.item("sigil_of_unnaming", TooltipItem::new, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> BOSS_SUMMONER = R.item("boss_summoner", BossSummonerItem::new);
+
+        public static final Holder<Item> SIMPLE_REFORGING_TABLE = R.blockItem("simple_reforging_table", Blocks.SIMPLE_REFORGING_TABLE);
+
+        public static final Holder<Item> REFORGING_TABLE = R.blockItem("reforging_table", Blocks.REFORGING_TABLE, p -> p.rarity(Rarity.EPIC));
+
+        public static final Holder<Item> SALVAGING_TABLE = R.blockItem("salvaging_table", Blocks.SALVAGING_TABLE);
+
+        public static final Holder<Item> GEM_CUTTING_TABLE = R.blockItem("gem_cutting_table", Blocks.GEM_CUTTING_TABLE);
+
+        public static final Holder<Item> AUGMENTING_TABLE = R.blockItem("augmenting_table", Blocks.AUGMENTING_TABLE, p -> p.rarity(Rarity.UNCOMMON));
+
+        public static final Holder<Item> GEM = R.item("gem", () -> new GemItem(new Item.Properties()));
+
+        private static Holder<Item> rarityMat(String id) {
+            return R.item(id + "_material", () -> new SalvageItem(RarityRegistry.INSTANCE.holder(Apotheosis.loc(id)), new Item.Properties()));
+        }
+
+        private static void bootstrap() {}
     }
 
     public static final class Tiles {
-        public static final RegistryObject<BlockEntityType<EnchLibraryTile>> LIBRARY = R.blockEntity("LIBRARY");
-        public static final RegistryObject<BlockEntityType<AnvilTile>> ANVIL = R.blockEntity("ANVIL");
-        public static final RegistryObject<BlockEntityType<EnchLibraryTile>> ENDER_LIBRARY = R.blockEntity("ENDER_LIBRARY");
-        public static final RegistryObject<BlockEntityType<BossSpawnerTile>> BOSS_SPAWNER = R.blockEntity("BOSS_SPAWNER");
-        public static final RegistryObject<BlockEntityType<ReforgingTableTile>> REFORGING_TABLE = R.blockEntity("REFORGING_TABLE");
-        public static final RegistryObject<BlockEntityType<SalvagingTableTile>> SALVAGING_TABLE = R.blockEntity("SALVAGING_TABLE");
-        public static final RegistryObject<BlockEntityType<AugmentingTableTile>> AUGMENTING_TABLE = R.blockEntity("augmenting_table");
+
+        public static final BlockEntityType<BossSpawnerTile> BOSS_SPAWNER = R.tickingBlockEntity("boss_spawner", BossSpawnerTile::new, TickSide.SERVER, Blocks.BOSS_SPAWNER);
+
+        public static final BlockEntityType<ReforgingTableTile> REFORGING_TABLE = R.tickingBlockEntity("reforging_table", ReforgingTableTile::new, TickSide.CLIENT, Blocks.REFORGING_TABLE, Blocks.SIMPLE_REFORGING_TABLE);
+
+        public static final BlockEntityType<SalvagingTableTile> SALVAGING_TABLE = R.blockEntity("salvaging_table", SalvagingTableTile::new, Blocks.BOSS_SPAWNER);
+
+        public static final BlockEntityType<AugmentingTableTile> AUGMENTING_TABLE = R.tickingBlockEntity("augmenting_table", AugmentingTableTile::new, TickSide.CLIENT, Blocks.AUGMENTING_TABLE);
+
+        private static void bootstrap() {}
     }
 
-    public static final class Affixes {
-        // Implicit affixes
-        public static final DynamicHolder<DurableAffix> DURABLE = AffixRegistry.INSTANCE.holder(Apotheosis.loc("durable"));
-        // Real affixes
-        public static final DynamicHolder<MagicalArrowAffix> MAGICAL = AffixRegistry.INSTANCE.holder(Apotheosis.loc("ranged/special/magical"));
-        public static final DynamicHolder<FestiveAffix> FESTIVE = AffixRegistry.INSTANCE.holder(Apotheosis.loc("sword/special/festive"));
-        public static final DynamicHolder<TelepathicAffix> TELEPATHIC = AffixRegistry.INSTANCE.holder(Apotheosis.loc("telepathic"));
-        public static final DynamicHolder<OmneticAffix> OMNETIC = AffixRegistry.INSTANCE.holder(Apotheosis.loc("breaker/special/omnetic"));
-        public static final DynamicHolder<RadialAffix> RADIAL = AffixRegistry.INSTANCE.holder(Apotheosis.loc("breaker/special/radial"));
+    public static final class Menus {
+
+        public static final MenuType<ReforgingMenu> REFORGING = R.menuWithPos("reforging", ReforgingMenu::new);
+
+        public static final MenuType<SalvagingMenu> SALVAGE = R.menuWithPos("salvage", SalvagingMenu::new);
+
+        public static final MenuType<GemCuttingMenu> GEM_CUTTING = R.menu("gem_cutting", GemCuttingMenu::new);
+
+        public static final MenuType<AugmentingMenu> AUGMENTING = R.menuWithPos("augmenting", AugmentingMenu::new);
+
+        private static void bootstrap() {}
     }
 
-    public static final class Tags {
-        public static final TagKey<Item> BOON_DROPS = ItemTags.create(new ResourceLocation(Apotheosis.MODID, "boon_drops"));
-        public static final TagKey<Item> SPEARFISHING_DROPS = ItemTags.create(new ResourceLocation(Apotheosis.MODID, "spearfishing_drops"));
-        public static final TagKey<Block> ROGUE_SPAWNER_COVERS = BlockTags.create(new ResourceLocation(Apotheosis.MODID, "rogue_spawner_covers"));
+    public static class Features {
+
+        public static final Holder<Feature<?>> BOSS_DUNGEON = R.feature("boss_dungeon", BossDungeonFeature::new);
+
+        public static final Holder<Feature<?>> BOSS_DUNGEON_2 = R.feature("boss_dungeon_2", BossDungeonFeature2::new);
+
+        public static final Holder<Feature<?>> ROGUE_SPAWNER = R.feature("rogue_spawner", RogueSpawnerFeature::new);
+
+        public static final Holder<StructureProcessorType<?>> ITEM_FRAME_GEMS = R.custom("item_frame_gems", Registries.STRUCTURE_PROCESSOR, () -> () -> ItemFrameGemsProcessor.CODEC);
+
+        private static void bootstrap() {}
+
+    }
+
+    public static class Tabs {
+
+        public static final Holder<CreativeModeTab> ADVENTURE = R.creativeTab("adventure",
+            b -> b.title(Component.translatable("itemGroup.apotheosis.adventure")).icon(() -> Items.GEM.value().getDefaultInstance()));
+
+        private static void bootstrap() {}
+    }
+
+    public static class Sounds {
+
+        public static final Holder<SoundEvent> REFORGE = R.sound("reforge");
+
+        private static void bootstrap() {}
     }
 
     public static final class RecipeTypes {
-        public static final RecipeType<FletchingRecipe> FLETCHING = PlaceboUtil.makeRecipeType("apotheosis:fletching");
-        public static final RecipeType<EnchantingRecipe> INFUSION = PlaceboUtil.makeRecipeType("apotheosis:enchanting");
-        public static final RecipeType<SpawnerModifier> MODIFIER = PlaceboUtil.makeRecipeType("apotheosis:spawner_modifier");
-        public static final RecipeType<SalvagingRecipe> SALVAGING = PlaceboUtil.makeRecipeType("apotheosis:salvaging");
-        public static final RecipeType<ReforgingRecipe> REFORGING = PlaceboUtil.makeRecipeType("apotheosis:reforging");
+        public static final RecipeType<SalvagingRecipe> SALVAGING = R.recipe("salvaging");
+        public static final RecipeType<ReforgingRecipe> REFORGING = R.recipe("reforging");
+
+        private static void bootstrap() {}
+    }
+
+    public static final class RecipeSerializers {
+
+        private static void bootstrap() {}
     }
 
     public static final class LootTables {
+
         public static final ResourceLocation CHEST_VALUABLE = Apotheosis.loc("chests/chest_valuable");
         public static final ResourceLocation SPAWNER_BRUTAL_ROTATE = Apotheosis.loc("chests/spawner_brutal_rotate");
         public static final ResourceLocation SPAWNER_BRUTAL = Apotheosis.loc("chests/spawner_brutal");
@@ -167,17 +202,29 @@ public class Apoth {
         public static final ResourceLocation TOME_TOWER = Apotheosis.loc("chests/tome_tower");
     }
 
-    public static final class Particles {
-        public static final RegistryObject<SimpleParticleType> ENCHANT_FIRE = R.particle("enchant_fire");
-        public static final RegistryObject<SimpleParticleType> ENCHANT_WATER = R.particle("enchant_water");
-        public static final RegistryObject<SimpleParticleType> ENCHANT_SCULK = R.particle("enchant_sculk");
-        public static final RegistryObject<SimpleParticleType> ENCHANT_END = R.particle("enchant_end");
+    public static final class Tags {
+
+        public static final TagKey<Block> ROGUE_SPAWNER_COVERS = BlockTags.create(Apotheosis.loc("rogue_spawner_covers"));
+
     }
 
     public static final class DamageTypes {
+
         public static final ResourceKey<DamageType> EXECUTE = ResourceKey.create(Registries.DAMAGE_TYPE, Apotheosis.loc("execute"));
         public static final ResourceKey<DamageType> PSYCHIC = ResourceKey.create(Registries.DAMAGE_TYPE, Apotheosis.loc("psychic"));
-        public static final ResourceKey<DamageType> CORRUPTED = ResourceKey.create(Registries.DAMAGE_TYPE, Apotheosis.loc("corrupted"));
+
+    }
+
+    public static void bootstrap() {
+        Blocks.bootstrap();
+        Items.bootstrap();
+        Tiles.bootstrap();
+        Menus.bootstrap();
+        Features.bootstrap();
+        Tabs.bootstrap();
+        Sounds.bootstrap();
+        RecipeTypes.bootstrap();
+        RecipeSerializers.bootstrap();
     }
 
 }

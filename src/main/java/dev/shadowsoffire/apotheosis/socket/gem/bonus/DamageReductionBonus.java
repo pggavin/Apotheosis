@@ -12,13 +12,13 @@ import dev.shadowsoffire.apotheosis.affix.Affix;
 import dev.shadowsoffire.apotheosis.affix.effect.DamageReductionAffix.DamageType;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.util.StepFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 
 public class DamageReductionBonus extends GemBonus {
 
@@ -39,18 +39,18 @@ public class DamageReductionBonus extends GemBonus {
     }
 
     @Override
-    public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
-        float level = this.values.get(rarity).get(0);
+    public Component getSocketBonusTooltip(GemInstance gem) {
+        float level = this.values.get(gem.getRarity()).get(0);
         return Component.translatable("affix.apotheosis:damage_reduction.desc", Component.translatable("misc.apotheosis." + this.type.getId()), Affix.fmt(100 * level)).withStyle(ChatFormatting.YELLOW);
     }
 
     @Override
-    public float onHurt(ItemStack gem, LootRarity rarity, DamageSource src, LivingEntity user, float amount) {
+    public float onHurt(GemInstance gem, DamageSource src, LivingEntity user, float amount) {
         if (!src.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !src.is(DamageTypeTags.BYPASSES_ENCHANTMENTS) && this.type.test(src)) {
-            float level = this.values.get(rarity).get(0);
+            float level = this.values.get(gem.getRarity()).get(0);
             return amount * (1 - level);
         }
-        return super.onHurt(gem, rarity, src, user, amount);
+        return super.onHurt(gem, src, user, amount);
     }
 
     @Override

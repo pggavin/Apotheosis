@@ -9,16 +9,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.shadowsoffire.apotheosis.Apotheosis;
 import dev.shadowsoffire.apotheosis.loot.LootRarity;
 import dev.shadowsoffire.apotheosis.socket.gem.GemClass;
+import dev.shadowsoffire.apotheosis.socket.gem.GemInstance;
 import dev.shadowsoffire.placebo.codec.PlaceboCodecs;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class EnchantmentBonus extends GemBonus {
 
-    protected final Enchantment ench;
+    protected final HolderSet<Enchantment> ench;
     protected final boolean mustExist;
     protected final boolean global;
     protected final Map<LootRarity, Integer> values;
@@ -26,13 +28,13 @@ public class EnchantmentBonus extends GemBonus {
     public static Codec<EnchantmentBonus> CODEC = RecordCodecBuilder.create(inst -> inst
         .group(
             gemClass(),
-            ForgeRegistries.ENCHANTMENTS.getCodec().fieldOf("enchantment").forGetter(a -> a.ench),
-            PlaceboCodecs.nullableField(Codec.BOOL, "must_exist", false).forGetter(a -> a.mustExist),
-            PlaceboCodecs.nullableField(Codec.BOOL, "global", false).forGetter(a -> a.global),
+            RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).fieldOf("enchantment").forGetter(a -> a.ench),
+            Codec.BOOL.optionalFieldOf("must_exist", false).forGetter(a -> a.mustExist),
+            Codec.BOOL.optionalFieldOf("global", false).forGetter(a -> a.global),
             LootRarity.mapCodec(Codec.intRange(1, 127)).fieldOf("values").forGetter(a -> a.values))
         .apply(inst, EnchantmentBonus::new));
 
-    public EnchantmentBonus(GemClass gemClass, Enchantment ench, boolean mustExist, boolean global, Map<LootRarity, Integer> values) {
+    public EnchantmentBonus(GemClass gemClass, HolderSet<Enchantment> ench, boolean mustExist, boolean global, Map<LootRarity, Integer> values) {
         super(Apotheosis.loc("enchantment"), gemClass);
         this.ench = ench;
         this.values = values;
@@ -41,8 +43,8 @@ public class EnchantmentBonus extends GemBonus {
     }
 
     @Override
-    public Component getSocketBonusTooltip(ItemStack gem, LootRarity rarity) {
-        int level = this.values.get(rarity);
+    public Component getSocketBonusTooltip(GemInstance gem) {
+        int level = this.values.get(gem.getRarity());
         String desc = "bonus." + this.getId() + ".desc";
         if (this.global) {
             desc += ".global";
@@ -57,7 +59,7 @@ public class EnchantmentBonus extends GemBonus {
     }
 
     @Override
-    public void getEnchantmentLevels(ItemStack gemStack, LootRarity rarity, Map<Enchantment, Integer> enchantments) {
+    public void getEnchantmentLevels(GemInstance gem, Map<Enchantment, Integer> enchantments) {
         int level = this.values.get(rarity);
         if (this.global) {
             for (Enchantment e : enchantments.keySet()) {
