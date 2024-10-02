@@ -146,6 +146,10 @@ public class ItemStackMixin {
         }
     }
 
+    /**
+     * @author
+     * @reason
+     */
     @Overwrite
     public float getDestroySpeed(BlockState p_41692_) {
         ItemStack stack = ((ItemStack) (Object) this);
@@ -162,7 +166,10 @@ public class ItemStackMixin {
         double flatPenalty = 0;
         double speedMultiplier = 1.0f;
 
-        if (progress > 0.5f) {
+        if (progress <= 0.0f){
+            speedMultiplier = 0.0001f;
+        }
+        else if (progress > 0.5f) {
             flatPenalty = 1.0f;
             speedMultiplier = 0.5f;
         }
