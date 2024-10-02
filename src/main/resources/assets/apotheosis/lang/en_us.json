@@ -1,10 +1,10 @@
 {
     "comment_id": "/Adventure Module",
 
-    "key.categories.apotheosis": "Apotheosis",
+    "key.categories.apotheosis": "Sopraneosis",
     "key.apotheosis.toggle_radial_mining": "Change Radial Mining Mode",
 
-    "info.apotheosis.affix_item": "Apothic Affix Item",
+    "info.apotheosis.affix_item": "Sopranic Affix Item",
     
     "death.attack.apotheosis.execute": "%s was executed by %s",
     "death.attack.apotheosis.execute.item": "%s was executed by %s using %s",
@@ -375,7 +375,7 @@
     "item.apotheosis.gem.apotheosis:twilight/forest": "Gem of the Twilight Forest",
     "item.apotheosis.gem.apotheosis:twilight/queen": "Gem of the Frozen Queen",
 
-    "item.apotheosis.boss_summoner": "Apothic Boss Summoner",
+    "item.apotheosis.boss_summoner": "Sopranic Boss Summoner",
     "item.apotheosis.gem.apotheosis:common": "Cracked %s",
     "item.apotheosis.gem.apotheosis:uncommon": "Chipped %s",
     "item.apotheosis.gem.apotheosis:rare": "Flawed %s",
@@ -386,7 +386,7 @@
     "item.apotheosis.vial_of_expulsion": "Vial of Searing Expulsion",
     "item.apotheosis.vial_of_unnaming": "Vial of Unnaming",
     "item.apotheosis.gem_dust": "Gem Dust",
-    "item.apotheosis.gem_dust.desc": "A Crushed Apothic Gemstone",
+    "item.apotheosis.gem_dust.desc": "A Crushed Sopranic Gemstone",
     "item.apotheosis.common_material": "Mysterious Scrap Metal",
     "item.apotheosis.uncommon_material": "Timeworn Fabric",
     "item.apotheosis.rare_material": "Luminous Crystal Shard",
@@ -453,7 +453,7 @@
     "text.apotheosis.upgraded_form": "Upgraded Form",
     "text.apotheosis.alternative_page": "Page %s/%s (scroll to change)",
 
-    "title.apotheosis.smithing": "Apothic Smithing",
+    "title.apotheosis.smithing": "Sopranic Smithing",
     "title.apotheosis.salvaging": "Salvaging",
 
     "text.apotheosis.anything": "Anything",
@@ -490,13 +490,13 @@
     "text.apotheosis.any_x_item": "Any %s Affix Item",
 
     "info.apotheosis.boss_spawn": "%s has awoken nearby!",
-    "info.apotheosis.boss": "%s Apothic Boss",
+    "info.apotheosis.boss": "%s Sopranic Boss",
     "info.apotheosis.boss_item": "Will Drop: %s",
     "info.apotheosis.boss_modifiers": "Boss Modifiers:",
     "info.apotheosis.rarity_material": "Rarity Material (%s)",
-    "info.apotheosis.gem_crushing": "Gem Dust is obtained by dropping any Apothic Gem the in world, and making an Anvil block fall onto it.",
-    "info.apotheosis.gem_extraction": "Used in a Smithing Table to unsocket Apothic Gems.\n\nThe item will be destroyed in the process.",
-    "info.apotheosis.gem_expulsion": "Used in a Smithing Table to unsocket Apothic Gems.\n\nThe gems will be destroyed in the process.",
+    "info.apotheosis.gem_crushing": "Gem Dust is obtained by dropping any Sopranic Gem the in world, and making an Anvil block fall onto it.",
+    "info.apotheosis.gem_extraction": "Used in a Smithing Table to unsocket Sopranic Gems.\n\nThe item will be destroyed in the process.",
+    "info.apotheosis.gem_expulsion": "Used in a Smithing Table to unsocket Sopranic Gems.\n\nThe gems will be destroyed in the process.",
     "info.apotheosis.unnaming": "Used in a Smithing Table to remove the affix components from an item's name.",
     "info.apotheosis.salvaging": "Rarity Materials are obtained by salvaging Affix Items in a Salvaging Table.",
     
@@ -514,11 +514,11 @@
 
     "comment_id": "/Adventure + Gateways Compat",
 
-    "misc.apotheosis.boss": "%s Apothic Boss",
+    "misc.apotheosis.boss": "%s Sopranic Boss",
     "misc.apotheosis.random": "Random",
     "reward.apotheosis.affix": "%s Affix Item",
     "reward.apotheosis.random_affix": "Random Affix Item",
-    "apotheosis.boss_gate_small": "Small Apothic Boss Gate",
+    "apotheosis.boss_gate_small": "Small Sopranic Boss Gate",
 
     "comment_id": "/Advancements",
 
@@ -601,8 +601,8 @@
     "advancements.apotheosis.max_rectified": "Only the Best",
     "advancements.apotheosis.max_rectified.desc": "Enchant an item with max stats and max rectification.",
     
-    "advancements.apotheosis.affix": "Apothic Affixes",
-    "advancements.apotheosis.affix.desc": "Find an item with an Apothic Affix.",
+    "advancements.apotheosis.affix": "Sopranic Affixes",
+    "advancements.apotheosis.affix.desc": "Find an item with an Sopranic Affix.",
 
     "advancements.apotheosis.rare": "Worthy Equipment",
     "advancements.apotheosis.rare.desc": "Find a rare affix item.",
@@ -617,7 +617,7 @@
     "advancements.apotheosis.ancient.desc": "Find an Ancient item.",
 
     "advancements.apotheosis.boss": "He Wasn't So Strong",
-    "advancements.apotheosis.boss.desc": "Slay an Apothic Boss, and retrieve their affix item.",
+    "advancements.apotheosis.boss.desc": "Slay an Sopranic Boss, and retrieve their affix item.",
     "advancements.apotheosis.chests": "I Found It Underground",
     "advancements.apotheosis.chests.desc": "Find an affix item in a chest.",
     "advancements.apotheosis.merchant": "I Got Deals",
@@ -626,7 +626,7 @@
     "advancements.apotheosis.random.desc": "Retrieve an affix item from a random monster.",
     
     "advancements.apotheosis.gem": "Not a Diamond",
-    "advancements.apotheosis.gem.desc": "Find a Apothic Gem, which can be socketed into Affix Items.",
+    "advancements.apotheosis.gem.desc": "Find a Sopranic Gem, which can be socketed into Affix Items.",
     
     "advancements.apotheosis.rare_gem": "Far From Perfect",
     "advancements.apotheosis.rare_gem.desc": "Acquire a Flawed Gem.",
@@ -641,11 +641,11 @@
     "advancements.apotheosis.socket.desc": "Using a Smithing Table, socket a Gem into an item.",
 
        "advancements.apotheosis.gem_cut": "The Lapidary",
-    "advancements.apotheosis.gem_cut.desc": "Use the Gem Cutting Table to upgrade an Apothic Gem.",
+    "advancements.apotheosis.gem_cut.desc": "Use the Gem Cutting Table to upgrade an Sopranic Gem.",
     
-    "advancements.apotheosis.spawner.root": "Apotheosis Spawners",
+    "advancements.apotheosis.spawner.root": "Sopraneosis Spawners",
     "advancements.apotheosis.spawner.root.desc": "Spawners can be collected and modified, see JEI for info.",
-    "advancements.apotheosis.spawner": "Apothic Spawners",
+    "advancements.apotheosis.spawner": "Sopranic Spawners",
     "advancements.apotheosis.spawner.desc": "Collect a mob spawner using Silk Touch.",
     "advancements.apotheosis.capturing": "Captured!",
     "advancements.apotheosis.capturing.desc": "Get a spawn egg from a mob using the Capturing enchantment",
@@ -1222,14 +1222,14 @@
     
     "comment_id": "/Misc",
     "info.apoth.modifier_disabled": "This Modifier is Disabled",
-    "itemGroup.apotheosis.adventure": "Apotheosis: Adventure Module",
-    "itemGroup.apotheosis.ench": "Apotheosis: Enchanting Module",
-    "config.jade.plugin_apotheosis.spawner": "Apoth Spawner Module",
-    "config.jade.plugin_apotheosis.ench": "Apoth Ench Module",
-    "config.jade.plugin_apotheosis.adventure": "Apoth Adventure Module",
+    "itemGroup.apotheosis.adventure": "Sopraneosis: Adventure Module",
+    "itemGroup.apotheosis.ench": "Sopraneosis: Enchanting Module",
+    "config.jade.plugin_apotheosis.spawner": "Sopraneosis Spawner Module",
+    "config.jade.plugin_apotheosis.ench": "Sopraneosis Ench Module",
+    "config.jade.plugin_apotheosis.adventure": "Sopraneosis Adventure Module",
     
     "comment_id": "Guidebook",
     "book.apotheosis.name": "Chronicle of Shadows",
-    "book.apotheosis.subtitle": "Guide to Apotheosis",
-    "book.apotheosis.landing": "Welcome to the world of Apotheosis.$(br2)Apotheosis is organized into $(#8080FF)Modules$(), and so is the content of this book.$(br2)Disabled modules are hidden."
+    "book.apotheosis.subtitle": "Guide to Sopraneosis",
+    "book.apotheosis.landing": "Welcome to the world of Sopraneosis.$(br2)Sopraneosis is organized into $(#8080FF)Modules$(), and so is the content of this book.$(br2)Disabled modules are hidden."
 }
