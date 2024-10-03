@@ -126,87 +126,29 @@ public class ItemStackMixin {
         }
     }
 
-    // Integration from the improved damage mod
-    @Inject(method = "getBarWidth", at = @At("RETURN"), cancellable = true)
-    public void getBarWidth(CallbackInfoReturnable<Integer> cir) {
-        ItemStack stack = ((ItemStack) (Object) this);
-        cir.setReturnValue(stack.getOrCreateTag().getBoolean("broken")
-                ? 13
-                : Math.round(13.0F - (float) stack.getDamageValue() * 13.0F / (float) stack.getMaxDamage()));
-    }
-
-    @Inject(method = "getBarColor", at = @At("RETURN"), cancellable = true)
-    public void getBarColor(CallbackInfoReturnable<Integer> cir) {
-        ItemStack stack = ((ItemStack) (Object) this);
-        if (stack.getOrCreateTag().getBoolean("broken")) cir.setReturnValue(Mth.hsvToRgb(0.001f, 1, 1));
-        else {
-            float stackMaxDamage = stack.getMaxDamage();
-            float f = Math.max(0.0F, (stackMaxDamage - (float) stack.getDamageValue()) / stackMaxDamage);
-            cir.setReturnValue(Mth.hsvToRgb(f / 3.0F, 1.0F, 1.0F));
-        }
-    }
-
     @Overwrite
     public float getDestroySpeed(BlockState p_41692_) {
         ItemStack stack = ((ItemStack) (Object) this);
         float realSpeed = stack.getItem().getDestroySpeed(stack, p_41692_);
 
-        if (!stack.isDamageableItem()) return realSpeed;
-
-        if (stack.getOrCreateTag().getBoolean("broken")) {
-            return 0.5f;
-        }
+        if (!stack.isDamageableItem())
+            return realSpeed;
 
         double start = 0.2f;
         double progress = (double) stack.getDamageValue() / (double) stack.getMaxDamage();
-        double flatPenalty = 0;
         double speedMultiplier = 1.0f;
 
-        if (progress > 0.5f) {
-            flatPenalty = 1.0f;
+        if (progress < 0.5f) {
             speedMultiplier = 0.5f;
         }
 
         if (progress < start) return stack.getItem().getDestroySpeed(stack, p_41692_);
         double penalty = 1 - 0.3 * progress;
 
-        float finalSpeed = (float) ((realSpeed * penalty - flatPenalty)* speedMultiplier) ;
+        float finalSpeed = (float) ((realSpeed * penalty)* speedMultiplier) ;
         float airSpeed = Items.AIR.getDestroySpeed(ItemStack.EMPTY, p_41692_);
 
         return Math.max(finalSpeed, airSpeed);
-    }
-
-    @Inject(method = "hurt", at = @At(value = "RETURN"), cancellable = true)
-    public void hurt(int p_41630_, RandomSource p_41631_, ServerPlayer p_41632_, CallbackInfoReturnable<Boolean> cir) {
-        ItemStack stack = ((ItemStack) (Object) this);
-        if (cir.getReturnValue()) {
-            if (!stack.getOrCreateTag().getBoolean("broken")) {
-                stack.getOrCreateTag().putBoolean("broken", true);
-            } else {
-                cir.setReturnValue(false);
-            }
-        }
-    }
-
-    @Inject(method = "hurtAndBreak", at = @At(value = "HEAD"), cancellable = true)
-    public <T extends LivingEntity> void hurtAndBreak(int i, T livingEntity, Consumer<T> consumer, CallbackInfo ci) {
-        ci.cancel();
-
-        ItemStack stack = ((ItemStack) (Object) this);
-
-        if (!livingEntity.level().isClientSide && (!(livingEntity instanceof Player) || !((Player)livingEntity).getAbilities().instabuild)) {
-            if (stack.isDamageableItem()) {
-                if (stack.hurt(i, livingEntity.getRandom(), livingEntity instanceof ServerPlayer ? (ServerPlayer)livingEntity : null)) {
-                    consumer.accept(livingEntity);
-                    Item item = stack.getItem();
-
-                    if (livingEntity instanceof Player) {
-                        ((Player)livingEntity).awardStat(Stats.ITEM_BROKEN.get(item));
-                    }
-                }
-
-            }
-        }
     }
 
     @Inject(method = "getMaxDamage", at = @At("RETURN"), cancellable = true)
