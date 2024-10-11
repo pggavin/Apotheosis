@@ -125,27 +125,20 @@ public class RealEnchantmentHelper {
      * @param blacklist     A list of all enchantments that may not be selected.
      * @return All possible enchantments that are eligible to be placed on this item at a specific power level.
      */
-    public static List<EnchantmentInstance> getAvailableEnchantmentResults(int power, ItemStack stack, boolean allowTreasure, Set<Enchantment> blacklist)
-    {
+    public static List<EnchantmentInstance> getAvailableEnchantmentResults(int power, ItemStack stack, boolean allowTreasure, Set<Enchantment> blacklist) {
         List<EnchantmentInstance> list = new ArrayList<>();
         IEnchantableItem item = (IEnchantableItem) stack.getItem();
         allowTreasure = item.isTreasureAllowed(stack, allowTreasure);
-        for (Enchantment enchantment : ForgeRegistries.ENCHANTMENTS)
-        {
+        for (Enchantment enchantment : ForgeRegistries.ENCHANTMENTS) {
             EnchantmentInfo info = EnchModule.getEnchInfo(enchantment);
-            if (info.isTreasure() && !allowTreasure || !info.isDiscoverable())
-                continue;
-            if (blacklist.contains(enchantment))
-                continue;
-            if (!(enchantment.canApplyAtEnchantingTable(stack) || item.forciblyAllowsTableEnchantment(stack, enchantment)))
-                continue;
-
-            for (int level = info.getMaxLevel(); level > enchantment.getMinLevel() - 1; --level)
-            {
-                if (power >= info.getMinPower(level) && power <= info.getMaxPower(level))
-                {
-                    list.add(new EnchantmentInstance(enchantment, level));
-                    break;
+            if (info.isTreasure() && !allowTreasure || !info.isDiscoverable()) continue;
+            if (blacklist.contains(enchantment)) continue;
+            if (enchantment.canApplyAtEnchantingTable(stack) || item.forciblyAllowsTableEnchantment(stack, enchantment)) {
+                for (int level = info.getMaxLevel(); level > enchantment.getMinLevel() - 1; --level) {
+                    if (power >= info.getMinPower(level) && power <= info.getMaxPower(level)) {
+                        list.add(new EnchantmentInstance(enchantment, level));
+                        break;
+                    }
                 }
             }
         }

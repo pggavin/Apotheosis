@@ -48,7 +48,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @SuppressWarnings("deprecation")
-public class    EnchModuleClient {
+public class EnchModuleClient {
 
     static BlockHitResult res = BlockHitResult.miss(Vec3.ZERO, Direction.NORTH, BlockPos.ZERO);
 
